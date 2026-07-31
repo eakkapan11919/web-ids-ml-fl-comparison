@@ -170,13 +170,25 @@
 
 ###### 
 
-###### The original CSE-CIC-IDS2018 dataset is not included in this repository.
+###### The original CSE-CIC-IDS2018 dataset is not included in this repository because of its large file size.
 
 ###### 
 
-###### Users should download the dataset from the official source and prepare CICFlowMeter-style feature files before using the system.
+###### This project uses CICFlowMeter-style network traffic features based on the CSE-CIC-IDS2018 dataset. Users should download the dataset separately and prepare CSV or Parquet files with CICFlowMeter-style features before uploading them to the web application.
 
 ###### 
+
+###### \## Dataset Download
+
+###### 
+
+###### The original CSE-CIC-IDS2018 dataset can be downloaded from the official AWS Open Data Registry:
+
+###### 
+
+###### https://registry.opendata.aws/cse-cic-ids2018/
+
+
 
 ###### \## Limitations
 
