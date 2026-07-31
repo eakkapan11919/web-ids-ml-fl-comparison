@@ -182,7 +182,15 @@
 
 ###### 
 
-###### The original CSE-CIC-IDS2018 dataset can be downloaded from the official AWS Open Data Registry:
+###### The dataset version used in this project was downloaded from Kaggle:
+
+###### 
+
+###### https://www.kaggle.com/datasets/dhoogla/csecicids2018
+
+###### 
+
+###### Official dataset information is also available from the AWS Open Data Registry:
 
 ###### 
 
