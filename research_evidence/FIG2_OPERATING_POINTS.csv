@@ -1,0 +1,5 @@
+model,stage1_binary_threshold,stage1_FPR,stage1_TPR,roc_auc,selection_note
+XGBoost,0.3,0.1480444133239972,0.9110529072812991,0.9674123452331667,0.30 is the validation-selected default; 0.40 for comparison
+XGBoost,0.4,0.07772331699509853,0.8715557883708748,0.9674123452331667,0.30 is the validation-selected default; 0.40 for comparison
+LightGBM,0.3,0.1485445633690107,0.908957569408067,0.9673450751831101,0.30 is the validation-selected default; 0.40 for comparison
+LightGBM,0.4,0.08082424727418225,0.8757464641173389,0.9673450751831101,0.30 is the validation-selected default; 0.40 for comparison

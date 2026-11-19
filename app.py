@@ -327,6 +327,10 @@ with tab_evidence:
     st.caption("FedAvg is a separate MLP experiment, not a model used for webpage predictions. Centralized and FL optimization procedures differ.")
     st.subheader("Stage 1 ROC at multiple thresholds")
     st.image(str(base/"FIG2_ROC_GROUPED_VALIDATED_SEED42.png"),width="stretch")
+    st.caption("วงกลม = Threshold 0.30 ที่เลือกจาก Validation; สี่เหลี่ยม = Threshold 0.40 ใช้เปรียบเทียบ. จุดแต่ละโมเดลอยู่ใกล้กันตามค่าจริง")
+    points=pd.read_csv(base/"FIG2_OPERATING_POINTS.csv")
+    st.dataframe(points[["model","stage1_binary_threshold","stage1_FPR","stage1_TPR","roc_auc"]].round(4),hide_index=True,width="stretch")
+    st.caption("ROC แสดง Stage 1 (Binary Attack/Benign) บน Test ชุดเดียวกัน ไม่ใช่ ROC ของ Stage 2 หรือ UnknownAttack")
     st.caption("Dataset split grouping by identical numerical feature hashes does not establish day/session independence. Results have not demonstrated statistically significant superiority.")
 
 def iter_upload(file):
@@ -345,6 +349,11 @@ with tab_detect:
     uploaded=st.file_uploader(T["upload_file"],type=["csv","parquet"],key="big_upload")
     if uploaded is None:
         st.info(T["upload_info"])
+        with st.expander("รูปแบบไฟล์ที่รองรับ / Required input schema"):
+            st.write("ต้องมีคอลัมน์ Numeric Network-flow Features 77 ตัวตาม CSE-CIC-IDS2018")
+            st.write("คอลัมน์ Label หรือ target_group ไม่จำเป็นต่อการทำนาย แต่จำเป็นสำหรับคำนวณ Accuracy / F1")
+            st.write("ไฟล์ CSV / Parquet ขนาดสูงสุด 250 MB ต่อไฟล์; ประมวลผลทีละ 5,000 แถว และดาวน์โหลดผลทั้งไฟล์เป็น ZIP")
+            st.write("Features ที่ต้องมี:", ", ".join(prep["columns"]))
     else:
         try:
             # Build one compressed prediction CSV incrementally, avoiding retaining full datasets.
@@ -393,6 +402,8 @@ with tab_detect:
                         else:
                             bar.progress(min(.99,(total%100000)/100000),text=f"Processed {total:,} flows")
             bar.progress(1.0,text=f"Completed {total:,} flows")
+            st.success(f"ประมวลผลสำเร็จ {total:,} แถว / Processed {total:,} rows")
+            st.caption(f"ใช้โมเดล {chosen}; Binary threshold {binary_threshold:.2f}; Unknown threshold {unknown_threshold:.2f}; อินพุตมี {len(prep['columns'])} คุณลักษณะที่ต้องการครบ")
             if not total:
                 st.error("No rows to process")
             else:
@@ -450,8 +461,19 @@ with tab_detect:
                     st.info(T["no_label"])
                 st.subheader(T["prediction_results"])
                 st.dataframe(preview.head(10),width="stretch")
+                # Streamlit download_button requires binary bytes or an accepted IO object.
+                # tempfile.TemporaryFile is not an accepted data type, so read the ZIP
+                # into bytes after streaming the CSV to disk; close the temp file.
                 compressed.seek(0)
-                st.download_button("Download complete predictions (ZIP with CSV)",data=compressed,file_name="ids_predictions.zip",mime="application/zip")
+                zip_bytes=compressed.read()
+                compressed.close()
+                st.download_button(
+                    "Download complete predictions (ZIP with CSV)",
+                    data=zip_bytes,
+                    file_name="ids_predictions.zip",
+                    mime="application/zip",
+                    on_click="ignore",
+                )
                 st.caption("ZIP includes the original columns and prediction outputs for every uploaded row; the table above displays only a preview to reduce memory.")
         except Exception as error:
             st.error(f"Input or prediction error: {error}")
