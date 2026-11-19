@@ -1,23 +1,27 @@
-# Two-Stage IDS Camera-ready v2 (review branch)
+# Two-Stage IDS: Camera-ready v3
 
-A Streamlit batch network-flow classification prototype powered by the **grouped-split seed 42** two-stage XGBoost and LightGBM models.
+Web prototype based on the original bilingual Streamlit app, upgraded for the Camera-ready grouped-split seed-42 models.
 
-## Model details
+## Features
+- Thai/English UI and original attack label legend.
+- XGBoost or LightGBM two-stage classification. Stage 1 detects Attack/Benign and Stage 2 classifies six attack labels only when Stage 1 flags Attack.
+- Binary 0.30 default selected on Validation macro-F1 from candidates 0.3/0.4/0.5/0.6. Security 0.20 / Low false alarm 0.60 / Custom modes are exploratory operating-point choices, not validated optima.
+- UnknownAttack 0.60 default is an exploratory low-confidence rejection; held-out unseen-attack detection remains poor.
+- Streamed CSV and Parquet input in 5,000-row chunks; maximum uploaded file size 250MB, contingent on Streamlit Cloud memory. Includes all original input rows in downloadable compressed ZIP containing CSV.
+- Original label distributions, evaluation metrics/confusion matrix from labeled uploads, translated labels, batch progress, complete results download.
+- Research Evidence tab with immutable previously measured CSV tables and figures. These are not recomputed by moving sliders.
 
-Stage 1 is a binary Benign/Attack classifier. Stage 2 classifies passing traffic into six attack types. It was trained on attack-labeled training flows only. Prediction labels are Benign, Bot, BruteForce, DDoS, DoS, Infiltration, WebAttack, or UnknownAttack (low-confidence rejection).
+## Model and research caveats
+- Inputs must include all 77 numeric feature columns, with exactly matching names after whitespace trim. No raw PCAP or live traffic.
+- The model/Preprocessing is derived from the grouped split (62,537 train, 15,641 validation, 19,542 test), seed 42. The three-seed means and independent splits are experiment summaries, not the fitted model used in deployment.
+- Feature-hash grouping prevents duplicate numeric feature vectors across the three stored splits. Independence at session/day level has not been established.
+- Uploaded data metrics with UnknownAttack enabled do not reproduce the 7-class Table II directly.
+- Federated Learning IID/Non-IID is a separate MLP experiment; not deployed by this Streamlit app.
+- The research evidence is explanatory, not proof of significant superiority or zero-day detection.
+- Test on Streamlit Cloud separately before merging into main.
 
-The model bundle includes training-fitted median imputation, MinMax scaling, the original ordered feature schema and a LabelEncoder. Stage 1 operating thresholds were selected from validation data using macro F1. **The UnknownAttack slider is experimental; it has not demonstrated reliable unseen or zero-day detection.**
+## Run
+pip install -r requirements.txt
+streamlit run app.py
 
-## Use
-
-Run `streamlit run app.py`. Upload a CSV or Parquet file with all **77 numerical flow features** matching the CSE-CIC-IDS2018 training schema. Do not upload raw PCAP. If a recognized seven-class Label or target_group column is present, optional per-upload evaluation appears. Download the prediction CSV to analyze each flow.
-
-## Scope and limitations
-
-The prototype is offline batch prediction, not a real-time packet monitor. The displayed metrics on uploaded labeled data may include an extra UnknownAttack prediction, and must not be confused with the seven-class published experimental results. The one-seed model artifacts are separate from the three-seed aggregate evaluation and the federated MLP experiments. The held-out-class UnknownAttack recall remained low. The group-aware split protects exact feature-hash duplicates across splits but does not establish independence at network session level.
-
-See `model_manifest.json` for run provenance.
-
-## Deployment
-
-This is a review-branch candidate. Do not merge to `main` before a deployment smoke test and review of model compatibility.
+Use demo_upload_sample.parquet for a quick test.
