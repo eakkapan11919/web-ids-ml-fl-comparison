@@ -1,222 +1,23 @@
-﻿###### \# Web IDS ML-FL Comparison
+# Two-Stage IDS Camera-ready v2 (review branch)
 
-###### 
+A Streamlit batch network-flow classification prototype powered by the **grouped-split seed 42** two-stage XGBoost and LightGBM models.
 
-###### A web-based offline Intrusion Detection System prototype using Machine Learning and Federated Learning evaluation.
+## Model details
 
-###### 
+Stage 1 is a binary Benign/Attack classifier. Stage 2 classifies passing traffic into six attack types. It was trained on attack-labeled training flows only. Prediction labels are Benign, Bot, BruteForce, DDoS, DoS, Infiltration, WebAttack, or UnknownAttack (low-confidence rejection).
 
-###### \## Deployed Web Application
+The model bundle includes training-fitted median imputation, MinMax scaling, the original ordered feature schema and a LabelEncoder. Stage 1 operating thresholds were selected from validation data using macro F1. **The UnknownAttack slider is experimental; it has not demonstrated reliable unseen or zero-day detection.**
 
-###### 
+## Use
 
-###### The deployed Streamlit web prototype is available at:
+Run `streamlit run app.py`. Upload a CSV or Parquet file with all **77 numerical flow features** matching the CSE-CIC-IDS2018 training schema. Do not upload raw PCAP. If a recognized seven-class Label or target_group column is present, optional per-upload evaluation appears. Download the prediction CSV to analyze each flow.
 
-###### 
+## Scope and limitations
 
-###### https://web-ids-ml-fl-comparison-nfx9wkn8tpea6n4rug44oc.streamlit.app
+The prototype is offline batch prediction, not a real-time packet monitor. The displayed metrics on uploaded labeled data may include an extra UnknownAttack prediction, and must not be confused with the seven-class published experimental results. The one-seed model artifacts are separate from the three-seed aggregate evaluation and the federated MLP experiments. The held-out-class UnknownAttack recall remained low. The group-aware split protects exact feature-hash duplicates across splits but does not establish independence at network session level.
 
-###### 
+See `model_manifest.json` for run provenance.
 
-###### \## GitHub Repository
+## Deployment
 
-###### 
-
-###### https://github.com/eakkapan11919/web-ids-ml-fl-comparison
-
-###### 
-
-###### \## Project Title
-
-###### 
-
-###### \*\*A Comparative Evaluation of Machine Learning and Federated Learning for a Web-based Intrusion Detection Prototype\*\*
-
-###### 
-
-###### \## Project Overview
-
-###### 
-
-###### This project presents an academic prototype of a web-based Intrusion Detection System (IDS).  
-
-###### The system is designed for offline/batch prediction, where users upload preprocessed network traffic feature files and receive prediction results from trained machine learning models.
-
-###### 
-
-###### The prototype focuses on comparing traditional Machine Learning models and Federated Learning evaluation results for intrusion detection tasks. The deployed web application uses selected machine learning models for prediction, while Federated Learning is used as part of the research comparison.
-
-###### 
-
-###### \## Main Features
-
-###### 
-
-###### \- Upload CSV or Parquet network traffic feature files
-
-###### \- Support CICFlowMeter-style features similar to the CSE-CIC-IDS2018 dataset
-
-###### \- Select between Two-stage XGBoost and Two-stage LightGBM
-
-###### \- Perform binary detection: Benign vs Attack
-
-###### \- Perform attack type classification
-
-###### \- Output `UnknownAttack` when attack type confidence is uncertain
-
-###### \- Support adjustable detection threshold modes:
-
-###### &#x20; - Security Mode: 0.3
-
-###### &#x20; - Balanced Mode: 0.4
-
-###### &#x20; - Low False Alarm Mode: 0.6
-
-###### \- Unknown Attack Threshold default: 0.6
-
-###### \- Display prediction results
-
-###### \- Display evaluation metrics
-
-###### \- Display confusion matrix
-
-###### \- Download prediction results as CSV
-
-###### 
-
-###### \## Models Used
-
-###### 
-
-###### The project includes the following model components:
-
-###### 
-
-###### \- Random Forest baseline
-
-###### \- Two-stage XGBoost
-
-###### \- Two-stage LightGBM
-
-###### \- Federated Learning evaluation using FedAvg MLP
-
-###### 
-
-###### \## Web Application Model
-
-###### 
-
-###### The deployed Streamlit web application supports:
-
-###### 
-
-###### \- Two-stage XGBoost
-
-###### \- Two-stage LightGBM
-
-###### 
-
-###### Random Forest and Federated Learning are included as part of the research comparison, but they are not the main deployed prediction models in the web prototype.
-
-###### 
-
-###### \## System Workflow
-
-###### 
-
-###### 1\. User uploads a CSV or Parquet file.
-
-###### 2\. The system preprocesses the uploaded data using the saved preprocessing pipeline.
-
-###### 3\. The selected model performs Stage 1 binary detection.
-
-###### 4\. If the traffic is predicted as an attack, Stage 2 classifies the attack type.
-
-###### 5\. If the attack type confidence is below the unknown threshold, the output is labeled as `UnknownAttack`.
-
-###### 6\. The system displays prediction results and evaluation metrics.
-
-###### 7\. The user can download the final prediction results as a CSV file.
-
-###### 
-
-###### \## How to Run Locally
-
-###### 
-
-###### ```bash
-
-###### pip install -r requirements.txt
-
-###### streamlit run app.py
-
-###### ```
-
-###### 
-
-###### \## Input Data Format
-
-###### 
-
-###### The uploaded file must be a CSV or Parquet file containing CICFlowMeter-style network traffic features similar to the CSE-CIC-IDS2018 dataset.
-
-###### 
-
-###### Raw PCAP files are not supported directly.
-
-###### 
-
-###### \## Dataset Notice
-
-###### 
-
-###### The original CSE-CIC-IDS2018 dataset is not included in this repository because of its large file size.
-
-###### 
-
-###### This project uses CICFlowMeter-style network traffic features based on the CSE-CIC-IDS2018 dataset. Users should download the dataset separately and prepare CSV or Parquet files with CICFlowMeter-style features before uploading them to the web application.
-
-###### 
-
-###### \## Dataset Download
-
-###### 
-
-###### The dataset version used in this project was downloaded from Kaggle:
-
-###### 
-
-###### https://www.kaggle.com/datasets/dhoogla/csecicids2018
-
-###### 
-
-###### Official dataset information is also available from the AWS Open Data Registry:
-
-###### 
-
-###### https://registry.opendata.aws/cse-cic-ids2018/
-
-
-
-###### \## Limitations
-
-###### 
-
-###### \- This system is an offline/batch prediction prototype.
-
-###### \- The system does not perform real-time packet capture.
-
-###### \- Raw PCAP files are not directly supported.
-
-###### \- The web application depends on the feature format used during model training.
-
-###### \- The prototype is intended for academic evaluation and demonstration.
-
-###### 
-
-###### \## Disclaimer
-
-###### 
-
-###### This project is an academic prototype and should not be used as a production security system without further validation, monitoring, and security testing.
-
+This is a review-branch candidate. Do not merge to `main` before a deployment smoke test and review of model compatibility.
