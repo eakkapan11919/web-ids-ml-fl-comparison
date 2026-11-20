@@ -41,8 +41,8 @@ TEXT = {
         "model": "Model",
         "stage1": "Stage 1: Benign / Attack Detection",
         "stage2": "Stage 2: Attack Type Classification",
-        "model_desc_xgb": "XGBoost: better at reducing missed attacks and improving Infiltration recall.",
-        "model_desc_lgbm": "LightGBM: best overall balance in Accuracy, Macro F1, Weighted F1, and lower false alarm.",
+        "model_desc_xgb": "XGBoost (grouped test, three training seeds): Accuracy 87.848%, Macro F1 89.602%.",
+        "model_desc_lgbm": "LightGBM (grouped test, three training seeds): Accuracy 87.905%, Macro F1 90.152%.",
         "missing_lgbm": "LightGBM model files were not found. Save the LightGBM .pkl files first to enable this option.",
 
         "threshold_mode": "Threshold Mode",
@@ -112,8 +112,8 @@ TEXT = {
         "model": "โมเดล",
         "stage1": "ขั้นที่ 1: ตรวจจับข้อมูลปกติ / การโจมตี",
         "stage2": "ขั้นที่ 2: จำแนกประเภทการโจมตี",
-        "model_desc_xgb": "XGBoost: เด่นด้านลดการโจมตีที่หลุด และจับ Infiltration ได้ดีกว่า",
-        "model_desc_lgbm": "LightGBM: คะแนนรวมดีที่สุด ทั้ง Accuracy, Macro F1, Weighted F1 และลด false alarm ได้ดีกว่า",
+        "model_desc_xgb": "XGBoost (Grouped Test เฉลี่ย 3 Seeds): Accuracy 87.848%, Macro F1 89.602%",
+        "model_desc_lgbm": "LightGBM (Grouped Test เฉลี่ย 3 Seeds): Accuracy 87.905%, Macro F1 90.152%",
         "missing_lgbm": "ยังไม่พบไฟล์โมเดล LightGBM ต้อง save ไฟล์ .pkl ของ LightGBM ก่อน จึงจะเลือกได้",
 
         "threshold_mode": "โหมดการตรวจจับ",
