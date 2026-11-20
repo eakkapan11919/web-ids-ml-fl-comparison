@@ -1,0 +1,30 @@
+{
+  "version": "camera-ready-grouped-seed42",
+  "training_rows": 62537,
+  "validation_rows": 15641,
+  "test_rows": 19542,
+  "models": [
+    "XGBoost",
+    "LightGBM"
+  ],
+  "thresholds": {
+    "XGBoost": {
+      "binary": 0.3,
+      "unknown_default": 0.6
+    },
+    "LightGBM": {
+      "binary": 0.3,
+      "unknown_default": 0.6
+    }
+  },
+  "unknown_threshold_status": "demonstration setting only; not validated as reliable unseen detection",
+  "source": "03_RESULTS/grouped_balanced_v2",
+  "class_counts_test_reported": "03_RESULTS/final_test_one_seed",
+  "feature_count": 77,
+  "notes": [
+    "No raw PCAP support",
+    "Offline feature CSV/Parquet only",
+    "Stage 2 trained on attack-labeled flows",
+    "New models are not legacy GitHub .pkl artifacts"
+  ]
+}
